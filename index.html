@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prescription Management System</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+<div id="loginPage" class="glass auth-box">
+
+<div class="logo">
+<h1>💊 Prescription System</h1>
+<p>Modern Healthcare Dashboard</p>
+</div>
+
+<div class="input-group">
+<label>Username</label>
+<input type="text" id="loginUser" placeholder="Enter username">
+</div>
+
+<div class="input-group">
+<label>Password</label>
+<input type="password" id="loginPass" placeholder="Enter password">
+</div>
+
+<button class="primary-btn" onclick="login()">Login</button>
+
+<div class="link" onclick="showRegister()">
+Create New Account
+</div>
+
+</div>
+
+<div id="registerPage" class="glass auth-box hidden">
+
+<div class="logo">
+<h1>🩺 Register</h1>
+</div>
+
+<div class="input-group">
+<label>Username</label>
+<input type="text" id="regUser">
+</div>
+
+<div class="input-group">
+<label>Password</label>
+<input type="password" id="regPass">
+</div>
+
+<button class="primary-btn" onclick="register()">Register</button>
+
+<div class="link" onclick="showLogin()">
+Back To Login
+</div>
+
+</div>
+
+<div id="homePage" class="hidden">
+
+<div class="dashboard">
+
+<div class="panel">
+
+<h2>📝 Create Prescription</h2>
+
+<div class="form-control">
+<input type="text" id="patient" placeholder="Patient Name">
+</div>
+
+<div class="form-control">
+<input type="number" id="age" placeholder="Age">
+</div>
+
+<div class="form-control">
+<select id="drug">
+<option value="">Select Drug</option>
+<option>Paracetamol</option>
+<option>Ibuprofen</option>
+<option>Amoxicillin</option>
+<option>Cetirizine</option>
+<option>Azithromycin</option>
+<option>Metformin</option>
+<option>Atorvastatin</option>
+<option>Omeprazole</option>
+</select>
+</div>
+
+<div class="form-control">
+<input type="text" id="dosage" placeholder="Dosage" readonly>
+</div>
+
+<div class="form-control">
+<input type="number" id="days" placeholder="Days">
+</div>
+
+<button class="action-btn" onclick="calculateDosage()">
+Calculate Dosage
+</button>
+
+<button class="action-btn" onclick="savePrescription()">
+Save Prescription
+</button>
+
+<button class="logout-btn" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<div>
+
+<div class="stats">
+
+<div class="stat">
+<p>Total Prescriptions</p>
+<h3 id="totalPrescriptions">0</h3>
+</div>
+
+<div class="stat">
+<p>Total Patients</p>
+<h3 id="totalPatients">0</h3>
+</div>
+
+<div class="stat">
+<p>Drugs Used</p>
+<h3 id="totalDrugs">0</h3>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>📋 Prescription History</h2>
+
+<div id="historyList"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module" src="/src/main.js"></script>
+
+</body>
+</html>
