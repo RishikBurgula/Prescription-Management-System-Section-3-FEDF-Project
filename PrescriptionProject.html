@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prescription Management System</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed,#06b6d4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+}
+
+.glass{
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+}
+
+.hidden{
+    display:none;
+}
+
+.logo{
+    text-align:center;
+    color:white;
+    margin-bottom:25px;
+}
+
+.logo h1{
+    font-size:2rem;
+}
+
+.logo p{
+    opacity:.8;
+}
+
+.auth-box{
+    max-width:450px;
+    margin:auto;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+label{
+    color:white;
+    display:block;
+    margin-bottom:6px;
+    font-size:14px;
+}
+
+input,select{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,0.18);
+    color:white;
+    font-size:15px;
+}
+
+input::placeholder{
+    color:#e5e7eb;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    box-shadow:0 0 0 3px rgba(255,255,255,.25);
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.primary-btn{
+    background:white;
+    color:#4f46e5;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px);
+}
+
+.link{
+    text-align:center;
+    margin-top:15px;
+    color:white;
+    cursor:pointer;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:350px 1fr;
+    gap:25px;
+}
+
+.panel{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+}
+
+.panel h2{
+    margin-bottom:15px;
+    color:#111827;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:18px;
+    border-radius:16px;
+    text-align:center;
+}
+
+.stat h3{
+    font-size:24px;
+}
+
+.form-control{
+    margin-bottom:12px;
+}
+
+.form-control input,
+.form-control select{
+    background:#f3f4f6;
+    color:#111827;
+}
+
+.action-btn{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    margin-top:10px;
+}
+
+.logout-btn{
+    background:#ef4444;
+    color:white;
+}
+
+.card{
+    background:#f8fafc;
+    padding:15px;
+    border-radius:16px;
+    margin-bottom:12px;
+    border-left:5px solid #4f46e5;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-2px);
+}
+
+.patient-name{
+    font-size:18px;
+    font-weight:600;
+    color:#111827;
+}
+
+.badge{
+    display:inline-block;
+    background:#ede9fe;
+    color:#6d28d9;
+    padding:4px 10px;
+    border-radius:20px;
+    margin-top:5px;
+    font-size:12px;
+}
+
+.toast{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#10b981;
+    color:white;
+    padding:14px 20px;
+    border-radius:12px;
+    display:none;
+    z-index:999;
+}
+
+@media(max-width:900px){
+
+.dashboard{
+    grid-template-columns:1fr;
+}
+
+.stats{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginPage" class="glass auth-box">
+
+    <div class="logo">
+        <h1>💊 Prescription System</h1>
+        <p>Modern Healthcare Dashboard</p>
+    </div>
+
+    <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" placeholder="Enter username">
+    </div>
+
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="Enter password">
+    </div>
+
+    <button class="primary-btn" onclick="login()">Login</button>
+
+    <div class="link" onclick="showRegister()">
+        Create New Account
+    </div>
+
+</div>
+
+<!-- REGISTER -->
+
+<div id="registerPage" class="glass auth-box hidden">
+
+    <div class="logo">
+        <h1>🩺 Register</h1>
+    </div>
+
+    <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="regUser">
+    </div>
+
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="regPass">
+    </div>
+
+    <button class="primary-btn" onclick="register()">Register</button>
+
+    <div class="link" onclick="showLogin()">
+        Back To Login
+    </div>
+
+</div>
+
+<!-- HOME -->
+
+<div id="homePage" class="hidden">
+
+<div class="dashboard">
+
+<div class="panel">
+
+<h2>📝 Create Prescription</h2>
+
+<div class="form-control">
+<input type="text" id="patient" placeholder="Patient Name">
+</div>
+
+<div class="form-control">
+<input type="number" id="age" placeholder="Age">
+</div>
+
+<div class="form-control">
+<select id="drug">
+<option value="">Select Drug</option>
+<option>Paracetamol</option>
+<option>Ibuprofen</option>
+<option>Amoxicillin</option>
+<option>Cetirizine</option>
+<option>Azithromycin</option>
+<option>Metformin</option>
+<option>Atorvastatin</option>
+<option>Omeprazole</option>
+</select>
+</div>
+
+<div class="form-control">
+<input type="text" id="dosage" placeholder="Dosage" readonly>
+</div>
+
+<div class="form-control">
+<input type="number" id="days" placeholder="Days">
+</div>
+
+<button class="action-btn" onclick="calculateDosage()">
+Calculate Dosage
+</button>
+
+<button class="action-btn" onclick="savePrescription()">
+Save Prescription
+</button>
+
+<button class="logout-btn" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<div>
+
+<div class="stats">
+
+<div class="stat">
+<p>Total Prescriptions</p>
+<h3 id="totalPrescriptions">0</h3>
+</div>
+
+<div class="stat">
+<p>Total Patients</p>
+<h3 id="totalPatients">0</h3>
+</div>
+
+<div class="stat">
+<p>Drugs Used</p>
+<h3 id="totalDrugs">0</h3>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>📋 Prescription History</h2>
+
+<div id="historyList"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const drugs={
+Paracetamol:{child:250,adult:500},
+Ibuprofen:{child:200,adult:400},
+Amoxicillin:{child:250,adult:500},
+Cetirizine:{child:5,adult:10},
+Azithromycin:{child:250,adult:500},
+Metformin:{child:250,adult:500},
+Atorvastatin:{child:10,adult:20},
+Omeprazole:{child:10,adult:20}
+};
+
+function toast(msg){
+
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+
+setTimeout(()=>{
+t.style.display="none";
+},2500);
+
+}
+
+function showRegister(){
+
+loginPage.classList.add("hidden");
+registerPage.classList.remove("hidden");
+
+}
+
+function showLogin(){
+
+registerPage.classList.add("hidden");
+loginPage.classList.remove("hidden");
+
+}
+
+function register(){
+
+let u=regUser.value;
+let p=regPass.value;
+
+if(!u || !p){
+toast("Fill all fields");
+return;
+}
+
+localStorage.setItem("username",u);
+localStorage.setItem("password",p);
+
+toast("Registration Successful");
+showLogin();
+
+}
+
+function login(){
+
+let u=loginUser.value;
+let p=loginPass.value;
+
+if(
+u===localStorage.getItem("username") &&
+p===localStorage.getItem("password")
+){
+
+loginPage.classList.add("hidden");
+homePage.classList.remove("hidden");
+
+loadHistory();
+
+}
+else{
+toast("Invalid Login");
+}
+
+}
+
+function logout(){
+
+homePage.classList.add("hidden");
+loginPage.classList.remove("hidden");
+
+}
+
+function calculateDosage(){
+
+let age=ageInput();
+
+let drug=drugSelect();
+
+if(age==="" || drug===""){
+toast("Enter age and drug");
+return;
+}
+
+let dose=age<12 ?
+drugs[drug].child :
+drugs[drug].adult;
+
+document.getElementById("dosage").value=
+dose+" mg";
+
+toast("Dosage Calculated");
+
+}
+
+function ageInput(){
+return document.getElementById("age").value;
+}
+
+function drugSelect(){
+return document.getElementById("drug").value;
+}
+
+function savePrescription(){
+
+let patient=patientField();
+let age=ageInput();
+let drug=drugSelect();
+let dosage=dosageField();
+let days=daysField();
+
+if(!patient||!age||!drug||!dosage||!days){
+toast("Fill all fields");
+return;
+}
+
+let data=JSON.parse(
+localStorage.getItem("prescriptions")
+)||[];
+
+data.push({
+patient,
+age,
+drug,
+dosage,
+days,
+date:new Date().toLocaleString()
+});
+
+localStorage.setItem(
+"prescriptions",
+JSON.stringify(data)
+);
+
+toast("Prescription Saved");
+
+clearFields();
+loadHistory();
+
+}
+
+function patientField(){
+return document.getElementById("patient").value;
+}
+
+function dosageField(){
+return document.getElementById("dosage").value;
+}
+
+function daysField(){
+return document.getElementById("days").value;
+}
+
+function loadHistory(){
+
+let list=document.getElementById("historyList");
+
+list.innerHTML="";
+
+let data=JSON.parse(
+localStorage.getItem("prescriptions")
+)||[];
+
+data.reverse().forEach(item=>{
+
+list.innerHTML+=`
+<div class="card">
+<div class="patient-name">
+👤 ${item.patient}
+</div>
+
+<div class="badge">
+${item.drug}
+</div>
+
+<p><b>Age:</b> ${item.age}</p>
+<p><b>Dosage:</b> ${item.dosage}</p>
+<p><b>Days:</b> ${item.days}</p>
+<p><small>${item.date}</small></p>
+</div>
+`;
+
+});
+
+document.getElementById("totalPrescriptions")
+.innerText=data.length;
+
+document.getElementById("totalPatients")
+.innerText=
+new Set(data.map(x=>x.patient)).size;
+
+document.getElementById("totalDrugs")
+.innerText=
+new Set(data.map(x=>x.drug)).size;
+
+}
+
+function clearFields(){
+
+patient.value="";
+age.value="";
+drug.value="";
+dosage.value="";
+days.value="";
+
+}
+
+</script>
+
+</body>
+</html>
